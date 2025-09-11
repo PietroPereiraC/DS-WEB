@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <h1><b>EXERCÍCIO 1</b></h1>
+    <h1>Primeiro formulario de Cadastro</h1>
+    <form action="processa.php" method="get">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" placeholder="Digite seu nome"><br>
+        <br>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" maxlength="50" placeholder="Digite seu email"><br>
+        <br>
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" placeholder="Digite sua senha"><br>
+        <br>
+        <label for="idade">Idade:</label>
+        <input type="number" id="idade" name="idade" min="1" max="120" placeholder="Digite sua idade"><br>
+        <br>
+        <input type="submit" value="Enviar">
+        </form>
+        <br>
+        <hr>
+        <br>
+        <h1><b>EXERCÍCIO 2</b></h1>
+        <br>
+        <h1>Qual o seu genero</h1>
+        <input type="radio" id="masculino" name="escolha" value="1">
+        <label for="masculino">Masculino</label>
+        <br>
+        <input type="radio" id="feminino" name="escolha" value="2" checked>
+        <label for="feminino">Feminino</label>
+        <br>
+        <input type="radio" id="outro" name="escolha" value="3" checked>
+        <label for="outro">Outro</label>
+        <br>
+        <br>
+        <br>
+        <h1>Qual é mais do seu Interesses</h1>
+        <input type="checkbox" id="tecnologia" name="interesses" value="tecnologia">
+        <label for="tecnologia">Tecnologia</label>
+        <input type="checkbox" id="esporte" name="interesses" value="esporte" checked>
+        <label for="esporte">Esporte</label>
+        <input type="checkbox" id="arte" name="interesses" value="arte" checked>
+        <label for="arte">Arte</label>
+        <input type="checkbox" id="musica" name="musica" value="musica" checked>
+        <label for="musica">Musica</label>
+        <br>
+        <br>
+        <label for="carro">Escolha seu carro favorito:</label>
+        <select id="carro" name="carro">
+        <option value="Toyta Corola">Toyta Corola</option>
+        <option value="Honda Civic">Honda Civic</option>
+        <option value="Honda CR-V">Honda CR-V</option>
+        <option value="Toyota RAV4">Toyota RAV4</option>
+        </select>
+        <br>
+        <br>
+        <input type="submit" value="Enviar">
+        <br>
+        <br>
+        <hr>
+        <br>
+        <h1><b>EXERCÍCIO 3</b></h1>
+        <h1>Formulário de Feedback</h1>
+    <form action="processa.php" method="get">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" placeholder="Digite seu nome"><br>
+        <br>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" maxlength="50" placeholder="Digite seu email"><br>
+        <br>
+        <body>
+            <h2>Sua opinião</h2>
+            <form>
+            <label for="resumo">Resumo:</label><br>
+            <textarea id="resumo" name="resumo" rows="6" cols="50" max-leng
+            th="300" required>
+            </textarea>
+            <br><br>
+            <button type="submit">Enviar</button>
+            </form>
+            </body>
+             
+
+</body>
+</html>

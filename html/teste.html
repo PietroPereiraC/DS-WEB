@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jogo de Pênaltis — 2 Jogadores</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --field1: #0c7c2d;
+      --field2: #0a6124;
+      --line: #eaf8e8;
+      --accent: #ffd166;
+      --accent-2: #06d6a0;
+      --danger: #ef476f;
+      --muted: #a8b3c7;
+      --panel: #11182a;
+      --panel-2: #0e1526;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --speed: .65s;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif;
+      color: #e9eef6;
+      background: radial-gradient(1200px 800px at 20% 10%, #101a33 0%, var(--bg) 60%);
+    }
+
+    .app {
+      min-height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 14px clamp(12px, 3vw, 28px);
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: .5px;
+      opacity: .9;
+    }
+
+    .score {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 10px 14px;
+      min-width: 260px;
+      font-weight: 700;
+    }
+    .score .name { opacity: .9; }
+    .score .nums {
+      font-size: clamp(22px, 4vw, 32px);
+      background: rgba(255,255,255,.04);
+      padding: 2px 10px;
+      border-radius: 12px;
+      min-width: 64px;
+      text-align: center;
+    }
+
+    .hud {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .tag {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      color: #d6deea;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 14px;
+      padding: 0 clamp(12px, 3vw, 28px) 18px;
+    }
+
+    @media (max-width: 980px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .panel h2 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }
+
+    .instructions { display: grid; gap: 10px; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    button, .btn {
+      appearance: none;
+      border: 0;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-weight: 700;
+      color: #0a0f1c;
+      background: linear-gradient(180deg, #ffffff, #dfe8ff);
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0,0,0,.25);
+      transition: transform .08s ease, box-shadow .2s ease, filter .2s ease;
+      user-select: none;
+    }
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(1px); filter: brightness(.95); }
+
+    .btn-ghost {
+      background: rgba(255,255,255,.06);
+      color: #e9eef6;
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .choice {
+      padding: 16px 10px;
+      text-align: center;
+      border-radius: 14px;
+      border: 1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.04);
+      color: #dfe7f3;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .06s ease, background .2s ease, border-color .2s ease;
+    }
+    .choice:hover { transform: translateY(-2px); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.28); }
+
+    .privacy {
+      display: none;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      align-items: center;
+      text-align: center;
+      padding: 12px;
+      border-radius: 14px;
+      background: repeating-linear-gradient(-45deg, rgba(255,255,255,.04) 0 10px, rgba(255,255,255,.06) 10px 20px);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    /* Field / stadium */
+    .stadium {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: radial-gradient(120% 70% at 50% 0%, rgba(255,255,255,.06) 0%, transparent 60%), 
+                  linear-gradient(90deg, var(--field1), var(--field2));
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      min-height: 520px;
+    }
+
+    .grass-lines::before, .grass-lines::after {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 3px, transparent 3px 46px);
+      opacity: .18;
+      pointer-events: none;
+    }
+
+    .pitch {
+      position: absolute; inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .goal-area {
+      position: relative;
+      width: min(600px, 92%);
+      aspect-ratio: 2.1 / 1;
+      /* white lines */
+      --lineW: 4px;
+      border-bottom: var(--lineW) solid var(--line);
+    }
+
+    .goal-posts {
+      position: absolute;
+      left: 50%; transform: translateX(-50%);
+      bottom: 0;
+      width: 88%;
+      height: 66%;
+      border: var(--line) solid 6px;
+      border-bottom: none;
+      border-radius: 10px 10px 0 0;
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.15);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.15), rgba(255,255,255,.02));
+    }
+
+    .net {
+      position: absolute; inset: 0;
+      left: 50%; transform: translateX(-50%);
+      bottom: 0; width: 88%; height: 66%;
+      background-image:
+        linear-gradient(90deg, rgba(255,255,255,.25) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,.25) 1px, transparent 1px);
+      background-size: 26px 22px;
+      filter: drop-shadow(0 6px 8px rgba(0,0,0,.6));
+      opacity: .45;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .penalty-spot {
+      position: absolute;
+      left: 50%; transform: translateX(-50%);
+      bottom: 10%;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--line);
+      box-shadow: 0 0 0 12px rgba(255,255,255,.08);
+    }
+
+    /* Actors */
+    .keeper, .striker, .ball { position: absolute; }
+
+    .keeper {
+      left: 50%; transform: translateX(-50%);
+      bottom: calc(34% + 8px);
+      width: 68px; height: 96px;
+      transition: transform var(--speed) ease;
+    }
+    .keeper svg { width: 100%; height: 100%; }
+
+    .striker {
+      left: 50%; transform: translateX(-50%);
+      bottom: 10%;
+      width: 64px; height: 100px;
+      opacity: .95;
+    }
+
+    .ball {
+      left: 50%; transform: translateX(-50%);
+      bottom: calc(10% + 8px);
+      width: 18px; height: 18px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff, #e7ecf5 60%, #cbd6ea 100%);
+      box-shadow: 0 6px 10px rgba(0,0,0,.35);
+      transition: left var(--speed) ease, bottom var(--speed) ease;
+      z-index: 2;
+    }
+
+    .shoot { animation: kick .6s ease forwards; }
+    @keyframes kick { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(.9); } }
+
+    .result-badge {
+      position: absolute;
+      left: 50%; transform: translateX(-50%);
+      bottom: 64%;
+      padding: 10px 14px; border-radius: 999px;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.2);
+      font-weight: 800;
+      display: none;
+    }
+
+    .result-badge.show { display: inline-block; }
+
+    footer { opacity: .7; font-size: 12px; text-align: center; padding: 8px 0 16px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">⚽ Pênaltis 2P</div>
+      <div class="score" id="scoreboard">
+        <span class="name" id="p1name">Jogador A</span>
+        <span class="nums" id="p1score">0</span>
+        <span>×</span>
+        <span class="nums" id="p2score">0</span>
+        <span class="name" id="p2name">Jogador B</span>
+      </div>
+      <div class="hud">
+        <span class="tag" id="roundTag">Rodada 1/5</span>
+        <span class="tag" id="turnTag">Vez de <strong>Atacante</strong></span>
+        <button class="btn-ghost" id="resetBtn" title="Reiniciar">Reiniciar</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <h2>Instruções</h2>
+        <div class="instructions" id="instructions">
+          <div class="privacy" id="handoff">
+            <div><strong>Privacidade:</strong> Passe o dispositivo para <span id="handoffRole">o CHUTADOR</span>. Quando estiver pronto, toque em “Começar”.</div>
+            <button id="startPhaseBtn">Começar</button>
+          </div>
+
+          <div id="phaseShooter">
+            <p><strong>CHUTADOR:</strong> escolha <em>secretamente</em> um canto do gol.</p>
+            <div class="grid" id="shootChoices"></div>
+          </div>
+
+          <div id="phaseKeeper" style="display:none;">
+            <p><strong>GOLEIRO:</strong> escolha onde defender. Você não verá a escolha do chute.</p>
+            <div class="grid" id="keepChoices"></div>
+          </div>
+
+          <div class="row" id="afterControls" style="display:none;">
+            <button id="nextBtn">Próxima jogada</button>
+            <button class="btn-ghost" id="swapNamesBtn">Renomear jogadores</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="stadium grass-lines panel" aria-label="Campo de futebol">
+        <div class="pitch">
+          <div class="goal-area">
+            <div class="net"></div>
+            <div class="goal-posts"></div>
+            <div class="keeper" id="keeper" aria-label="Goleiro">
+              <!-- Simple SVG keeper -->
+              <svg viewBox="0 0 64 96" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="gk" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#06d6a0"/>
+                    <stop offset="100%" stop-color="#059669"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="32" cy="16" r="12" fill="#ffd166"/>
+                <rect x="22" y="28" width="20" height="28" rx="6" fill="url(#gk)"/>
+                <rect x="6" y="36" width="18" height="12" rx="6" fill="#06b6d4"/>
+                <rect x="40" y="36" width="18" height="12" rx="6" fill="#06b6d4"/>
+                <rect x="18" y="56" width="10" height="28" rx="6" fill="#94a3b8"/>
+                <rect x="36" y="56" width="10" height="28" rx="6" fill="#94a3b8"/>
+              </svg>
+            </div>
+            <div class="striker" aria-label="Atacante">
+              <!-- Simple SVG striker -->
+              <svg viewBox="0 0 64 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="st" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#60a5fa"/>
+                    <stop offset="100%" stop-color="#2563eb"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="32" cy="14" r="12" fill="#ffd166"/>
+                <rect x="20" y="26" width="24" height="32" rx="7" fill="url(#st)"/>
+                <rect x="6" y="36" width="18" height="12" rx="6" fill="#7c3aed"/>
+                <rect x="40" y="36" width="18" height="12" rx="6" fill="#7c3aed"/>
+                <rect x="18" y="58" width="10" height="28" rx="6" fill="#111827"/>
+                <rect x="36" y="58" width="10" height="28" rx="6" fill="#111827"/>
+              </svg>
+            </div>
+            <div class="ball" id="ball" aria-label="Bola"></div>
+            <div class="penalty-spot"></div>
+            <div class="result-badge" id="resultBadge">GOL!</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Dica: para manter segredo, use o botão de <em>Privacidade</em> que aparece entre as fases e passe o dispositivo para a outra pessoa.
+    </footer>
+  </div>
+
+  <script>
+    // ----- State -----
+    const state = {
+      roundMax: 5,
+      round: 1,
+      turnShooterIsP1: true, // alterna a cada jogada
+      p1: { name: 'Jogador A', score: 0 },
+      p2: { name: 'Jogador B', score: 0 },
+      pending: { shot: null, save: null },
+      phase: 'handoff-shooter', // 'shooter' | 'handoff-keeper' | 'keeper' | 'reveal'
+    };
+
+    // Zones (6): TL, TC, TR, BL, BC, BR
+    const ZONES = [
+      { id: 'TL', label: 'Topo Esq.' },
+      { id: 'TC', label: 'Topo Centro' },
+      { id: 'TR', label: 'Topo Dir.' },
+      { id: 'BL', label: 'Baixo Esq.' },
+      { id: 'BC', label: 'Baixo Centro' },
+      { id: 'BR', label: 'Baixo Dir.' },
+    ];
+
+    const els = {
+      p1name: document.getElementById('p1name'),
+      p2name: document.getElementById('p2name'),
+      p1score: document.getElementById('p1score'),
+      p2score: document.getElementById('p2score'),
+      roundTag: document.getElementById('roundTag'),
+      turnTag: document.getElementById('turnTag'),
+      resetBtn: document.getElementById('resetBtn'),
+      swapNamesBtn: document.getElementById('swapNamesBtn'),
+      stadium: document.querySelector('.stadium'),
+      keeper: document.getElementById('keeper'),
+      ball: document.getElementById('ball'),
+      resultBadge: document.getElementById('resultBadge'),
+      // phases
+      handoff: document.getElementById('handoff'),
+      handoffRole: document.getElementById('handoffRole'),
+      startPhaseBtn: document.getElementById('startPhaseBtn'),
+      phaseShooter: document.getElementById('phaseShooter'),
+      phaseKeeper: document.getElementById('phaseKeeper'),
+      shootChoices: document.getElementById('shootChoices'),
+      keepChoices: document.getElementById('keepChoices'),
+      afterControls: document.getElementById('afterControls'),
+      nextBtn: document.getElementById('nextBtn'),
+      instructions: document.getElementById('instructions'),
+    };
+
+    // Build choice buttons
+    function buildChoices(container, onPick) {
+      container.innerHTML = '';
+      ZONES.forEach(z => {
+        const btn = document.createElement('button');
+        btn.className = 'choice';
+        btn.textContent = z.label;
+        btn.addEventListener('click', () => onPick(z.id));
+        container.appendChild(btn);
+      });
+    }
+
+    buildChoices(els.shootChoices, (zone) => {
+      state.pending.shot = zone;
+      goToPhase('handoff-keeper');
+    });
+    buildChoices(els.keepChoices, (zone) => {
+      state.pending.save = zone;
+      resolvePlay();
+    });
+
+    // UI updates
+    function updateHUD() {
+      els.p1name.textContent = state.p1.name;
+      els.p2name.textContent = state.p2.name;
+      els.p1score.textContent = state.p1.score;
+      els.p2score.textContent = state.p2.score;
+      els.roundTag.textContent = `Rodada ${state.round}/${state.roundMax}`;
+      const role = state.phase.includes('keeper') || state.phase==='keeper' ? 'Goleiro' :
+                   state.phase.includes('shooter') || state.phase==='shooter' ? 'Atacante' :
+                   (state.pending.shot && !state.pending.save) ? 'Goleiro' : 'Atacante';
+      els.turnTag.innerHTML = `Vez de <strong>${role}</strong>`;
+
+      // Handoff role text
+      const shooterIsP1 = state.turnShooterIsP1;
+      const shooterName = shooterIsP1 ? state.p1.name : state.p2.name;
+      const keeperName = shooterIsP1 ? state.p2.name : state.p1.name;
+      els.handoffRole.textContent = (state.phase==='handoff-shooter') ? `${shooterName} (CHUTADOR)` : `${keeperName} (GOLEIRO)`;
+    }
+
+    function goToPhase(phase) {
+      state.phase = phase;
+      els.handoff.style.display = (phase.startsWith('handoff')) ? 'grid' : 'none';
+      els.phaseShooter.style.display = (phase==='shooter') ? 'block' : 'none';
+      els.phaseKeeper.style.display = (phase==='keeper') ? 'block' : 'none';
+      els.afterControls.style.display = (phase==='reveal') ? 'flex' : 'none';
+      updateHUD();
+    }
+
+    els.startPhaseBtn.addEventListener('click', () => {
+      if (state.phase==='handoff-shooter') goToPhase('shooter');
+      else if (state.phase==='handoff-keeper') goToPhase('keeper');
+    });
+
+    function keeperTo(zone) {
+      // Move keeper towards zone visually
+      const dx = { 'TL': -60, 'TC': 0, 'TR': 60, 'BL': -56, 'BC': 0, 'BR': 56 }[zone];
+      const dy = { 'TL': 0, 'TC': 0, 'TR': 0, 'BL': 24, 'BC': 24, 'BR': 24 }[zone];
+      els.keeper.style.transform = `translateX(calc(-50% + ${dx}px)) translateY(${dy}px)`;
+    }
+
+    function ballTo(zone) {
+      // Move ball to zone visually
+      const bx = { 'TL': -120, 'TC': 0, 'TR': 120, 'BL': -120, 'BC': 0, 'BR': 120 }[zone];
+      const by = { 'TL': 210, 'TC': 210, 'TR': 210, 'BL': 140, 'BC': 140, 'BR': 140 }[zone];
+      els.ball.classList.add('shoot');
+      els.ball.style.left = `calc(50% + ${bx}px)`;
+      els.ball.style.bottom = `calc(10% + 8px + ${by}px)`;
+    }
+
+    function resetActors() {
+      els.keeper.style.transform = 'translateX(-50%)';
+      els.ball.classList.remove('shoot');
+      els.ball.style.left = '50%';
+      els.ball.style.bottom = 'calc(10% + 8px)';
+      els.resultBadge.classList.remove('show');
+    }
+
+    function resolvePlay() {
+      // Animate
+      const { shot, save } = state.pending;
+      keeperTo(save);
+      // Tiny delay to kickoff feel
+      setTimeout(() => ballTo(shot), 90);
+
+      // Decide
+      const isSave = shot === save;
+      const badge = els.resultBadge;
+      badge.textContent = isSave ? 'DEFENDEU!' : 'GOL!';
+      badge.style.background = isSave ? 'rgba(239,71,111,.85)' : 'rgba(6,214,160,.85)';
+
+      setTimeout(() => {
+        badge.classList.add('show');
+        // Score & round logic
+        const shooter = state.turnShooterIsP1 ? state.p1 : state.p2;
+        if (!isSave) shooter.score += 1;
+        // Advance
+        goToPhase('reveal');
+        updateHUD();
+        checkGameEnd();
+      }, 650);
+    }
+
+    function nextTurn() {
+      // Swap roles, advance round every full pair of kicks
+      state.turnShooterIsP1 = !state.turnShooterIsP1;
+      if (state.turnShooterIsP1) {
+        // both have kicked once -> next round
+        state.round = Math.min(state.round + 1, state.roundMax);
+      }
+      state.pending.shot = null;
+      state.pending.save = null;
+      resetActors();
+      // Start with shooter handoff again
+      goToPhase('handoff-shooter');
+    }
+
+    function checkGameEnd() {
+      if (state.round > state.roundMax) return;
+      const kicksDone = (state.round - 1) * 2 + (state.turnShooterIsP1 ? 0 : 1);
+      const totalKicks = state.roundMax * 2;
+      if (kicksDone >= totalKicks) {
+        // End game — show winner in tag and lock next to reset
+        const winner = (state.p1.score === state.p2.score) ? 'Empate' : (state.p1.score > state.p2.score ? state.p1.name : state.p2.name);
+        els.turnTag.innerHTML = (winner==='Empate') ? 'Fim de jogo — <strong>Empate</strong>' : `Fim — Vencedor: <strong>${winner}</strong>`;
+      }
+    }
+
+    // Events
+    els.nextBtn.addEventListener('click', nextTurn);
+    els.resetBtn.addEventListener('click', () => {
+      state.round = 1;
+      state.turnShooterIsP1 = true;
+      state.p1.score = 0; state.p2.score = 0;
+      state.pending.shot = null; state.pending.save = null;
+      resetActors();
+      goToPhase('handoff-shooter');
+      updateHUD();
+    });
+
+    els.swapNamesBtn.addEventListener('click', () => {
+      const n1 = prompt('Nome do Jogador A:', state.p1.name) ?? state.p1.name;
+      const n2 = prompt('Nome do Jogador B:', state.p2.name) ?? state.p2.name;
+      state.p1.name = (n1.trim()||state.p1.name).slice(0,18);
+      state.p2.name = (n2.trim()||state.p2.name).slice(0,18);
+      updateHUD();
+    });
+
+    // Boot
+    resetActors();
+    goToPhase('handoff-shooter');
+    updateHUD();
+  </script>
+</body>
+</html>

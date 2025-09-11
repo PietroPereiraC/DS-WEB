@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Site com DIV</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Cabeçalho */
+    .header {
+      background: red;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 24px;
+    }
+
+    /* Menu */
+    .menu {
+      background: black;
+      color: white;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .menu a:hover {
+      text-decoration: underline;
+    }
+
+    /* Conteúdo principal */
+    .conteudo {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .noticia {
+      flex: 2;
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .lateral {
+      flex: 1;
+      background: #ddd;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    /* Rodapé */
+    .footer {
+      background: black;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    Meu Site com DIV
+  </div>
+
+  <div class="menu">
+    <a href="#">Início</a>
+    <a href="#">Notícias</a>
+    <a href="#">Sobre</a>
+    <a href="#">Contato</a>
+  </div>
+
+  <div class="conteudo">
+    <div class="noticia">
+      <h2>Título da Notícia</h2>
+      <p>Esse é o texto da notícia principal. Aqui você pode escrever sobre o que quiser!</p>
+    </div>
+
+    <div class="lateral">
+      <h3>Barra lateral</h3>
+      <p>Aqui pode ficar propaganda, links ou outras informações.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 - Meu Site. Todos os direitos reservados.
+  </div>
+
+</body>
+</html>
