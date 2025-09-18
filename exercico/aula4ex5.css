@@ -1,0 +1,12 @@
+.box{
+    background-color: chocolate;
+    height: 250px;
+    width: 200px;
+    
+    padding: 15px;
+    border: 2px solid black;
+
+    margin: 10px;
+    display: inline-block
+}
+

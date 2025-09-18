@@ -1,0 +1,40 @@
+
+.box{
+    background-color: chocolate;
+    height: 40px;
+    width: 120px;
+    
+    padding: 20px;
+    border: 2px solid black;
+
+    margin: 5px;
+    display: inline-block
+}
+
+.box2{
+    background-color: cyan;
+    height: 40px;
+    width: 120px;
+    border: 1px solid black;
+    padding: 20px;
+    margin: 5px;
+    display: inline-block
+}
+.box3{
+    background-color: rgb(206, 30, 30);
+    height: 40px;
+    width: 120px;
+    border: 1px solid black;
+    padding: 20px;
+    margin: 5px;
+    display: inline-block
+}
+.box4{
+    background-color: rgb(10, 60, 43);
+    height: 40px;
+    width: 120px;
+    border: 1px solid black;
+    padding: 20px;
+    margin: 5px;
+    display: inline-block
+}

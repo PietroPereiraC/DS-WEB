@@ -1,0 +1,16 @@
+
+.maior{
+    background-color: rgb(30, 210, 63);
+    height: 300px;
+    width: 400px;
+    
+    padding: 20px;
+    border: 2px solid black;
+
+}
+.menor{
+    background-color: chocolate;
+    height: 100px;
+    width: 200px;
+    margin: 30px;
+}

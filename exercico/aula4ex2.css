@@ -1,0 +1,21 @@
+
+.box{
+    background-color: chocolate;
+    height: 150px;
+    width: 150px;
+    
+    padding: 10px;
+
+    margin: 15px;
+
+}
+.box2{
+    background-color: cyan;
+    height: 150px;
+    width: 150px;
+    padding: 10px;
+    margin: 15px;
+}
+div{
+    display: inline-block
+}
