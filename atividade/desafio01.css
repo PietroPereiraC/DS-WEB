@@ -1,0 +1,21 @@
+.menu{
+    height: 60px ;
+    width: 100% ;
+
+    background-color: grey;
+
+    position: fixed; top: 0; left: 0;
+}
+
+.menulateral{
+    position: fixed;
+    height: 2000px;
+    width: 250px;
+
+    background-color: rgb(142, 121, 121);
+}
+.texto{
+
+    margin-top: 70px;
+    margin-left: 280px;
+}

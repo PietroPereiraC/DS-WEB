@@ -1,15 +1,15 @@
-/* Banner principal */
+
 .banner {
     width: 100%;
     height: 150px;
     background-color: steelblue;
-    text-align: center; /* usado quando o título é inline-block */
+    text-align: center; 
     display: flex;
-    align-items: center;   /* centraliza verticalmente */
-    justify-content: center; /* deixa no meio da largura */
+    align-items: center;   
+    justify-content: center; 
   }
   
-  /* Título */
+ 
   .titulo {
     width: 400px;
     height: 80px;
@@ -18,9 +18,9 @@
     font-size: 24px;
     font-weight: bold;
   
-    /* Experimente trocar as duas linhas abaixo: */
-    display: block;          /* ocupa toda a largura disponível */
-    /* display: inline-block; */ /* ocupa só o conteúdo e centraliza via text-align do banner */
-    margin: 0 auto; /* funciona no block para centralizar */
+  
+    display: block;   
+
+    margin: 0 auto;
   }
   

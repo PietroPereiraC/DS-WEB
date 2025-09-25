@@ -1,0 +1,14 @@
+.caixa{
+    height: 400px;
+    width: 300px;
+    background-color: rgb(71, 71, 183);
+
+    position: relative;
+}
+.caixa02{
+    height: 100px;
+    width: 100px;
+    background-color: rgb(71, 183, 101);
+
+    position: absolute;bottom: 0;right: 0;
+}
