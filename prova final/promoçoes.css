@@ -1,0 +1,86 @@
+h1 {
+    background: #822e2e;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    }
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(
+        to bottom,
+        rgb(255, 255, 255) 33.3%,
+        rgb(255, 255, 255) 33.3% 66.6%,
+        rgb(255, 255, 255) 66.6%
+      );
+    }
+  .div-centralizada{
+    border: 5px solid #822e2e;
+    padding: 20px;
+    margin: 0px 50px 0px 50px;
+    background-color: #f4a35d;
+  }
+  body {
+    font-size: 20px; 
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    font-size: 50px; 
+}
+
+h2 {
+    font-size: 30px;
+}
+
+h3 {
+    font-size: 25px;
+}
+
+p {
+    font-size: 20px;
+    line-height: 1.5; 
+}
+.box1{
+    height: 100px;
+    width: 200px;
+    background-color: burlywood;
+    top: 0px;
+    margin:10px;
+    text-align: center;
+    display:inline-block
+    
+}
+.box2{
+    height: 100px;
+    width: 200px;
+    background-color: burlywood;
+    top: 0px;
+    margin:10px;
+    text-align: center;
+    display:inline-block
+}
+.box3{
+    height: 100px;
+    width: 200px;
+    background-color: burlywood;
+    top: 0px;
+    margin:10px;
+    text-align: center;
+    display:inline-block
+}
+.box4{
+    height: 100px;
+    width: 200px;
+    background-color: burlywood;
+    top: 0px;
+    margin:10px;
+    text-align: center;
+    display:inline-block
+}
+.boxgrande{
+    border: 2px solid #f4a35d;
+    padding: 50px;
+    display:inline-block
+    margin:50px;
+}
